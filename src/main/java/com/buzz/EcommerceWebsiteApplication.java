@@ -1,4 +1,4 @@
-package ecommerce_website;
+package com.buzz;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
