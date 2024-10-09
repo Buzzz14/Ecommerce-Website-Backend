@@ -33,6 +33,7 @@ public class User {
     @Embedded
     @ElementCollection
     @CollectionTable(name = "payment_information", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "payment_information")
     private List<PaymentInformation> paymentInformation=new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade= CascadeType.ALL)
@@ -43,6 +44,7 @@ public class User {
     @JsonIgnore
     private List<Review> review = new ArrayList<>();
 
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     public User(){

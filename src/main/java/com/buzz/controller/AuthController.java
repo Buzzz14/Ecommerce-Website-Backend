@@ -2,10 +2,12 @@ package com.buzz.controller;
 
 import com.buzz.config.JwtProvider;
 import com.buzz.exception.UserException;
+import com.buzz.model.Cart;
 import com.buzz.model.User;
 import com.buzz.repository.UserRepository;
 import com.buzz.request.LoginRequest;
 import com.buzz.response.AuthResponse;
+import com.buzz.service.CartService;
 import com.buzz.service.CustomUserServiceImplementation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,12 +29,16 @@ public class AuthController {
     private JwtProvider jwtProvider;
     private PasswordEncoder passwordEncoder;
     private CustomUserServiceImplementation customUserServiceImplementation;
+    private CartService cartService;
 
-    public AuthController(UserRepository userRepository,  JwtProvider jwtProvider, PasswordEncoder passwordEncoder, CustomUserServiceImplementation customUserServiceImplementation) {
+
+    public AuthController(UserRepository userRepository,  JwtProvider jwtProvider, PasswordEncoder passwordEncoder,
+                          CustomUserServiceImplementation customUserServiceImplementation, CartService cartService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.customUserServiceImplementation = customUserServiceImplementation;
         this.jwtProvider = jwtProvider;
+        this.cartService = cartService;
     }
 
     @PostMapping("/signup")
@@ -55,6 +61,8 @@ public class AuthController {
         createdUser.setLastName(lastName);
 
         User savedUser = userRepository.save(createdUser);
+
+        Cart cart = cartService.createCart(savedUser);
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(savedUser.getEmail(), savedUser.getPassword());
         SecurityContextHolder.getContext().setAuthentication(authentication);
